@@ -11,6 +11,7 @@ ruby_block 'insert line' do
     file.insert_line_if_no_match('/alice/', 'hello alice')
     file.insert_line_if_no_match('bob', 'hello bob')
     file.write_file
+    # check if file content changed; if so notifies execute command
     if file.file_edited?
       puts "\n!!file edited!!\n"
       notifies :run, 'execute[hello]'
