@@ -6,6 +6,7 @@
 
 ruby_block 'insert line' do
   block do
+    # note for this to work, file must exist first. otherwise got error
     file = Chef::Util::FileEdit.new('/tmp/myfile')
     # note it only checks if line exists, order may not be correct
     file.insert_line_if_no_match('/alice/', 'hello alice')
