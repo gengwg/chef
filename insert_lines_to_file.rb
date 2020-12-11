@@ -1,16 +1,26 @@
 # insert lines to a file
 
-file '/tmp/myfile' do
-  content "hello world\n"
-end
+# file '/tmp/myfile' do
+#   content "hello world\n"
+# end
 
 ruby_block 'insert line' do
   block do
     file = Chef::Util::FileEdit.new('/tmp/myfile')
+    # note it only checks if line exists, order may not be correct
     file.insert_line_if_no_match('/alice/', 'hello alice')
-    file.insert_line_if_no_match('/bob/', 'hello bob')
+    file.insert_line_if_no_match('bob', 'hello bob')
     file.write_file
+    if file.file_edited?
+      puts "\n!!file edited!!\n"
+      notifies :run, 'execute[hello]'
+    end
   end
+end
+
+execute 'hello' do
+  command 'echo hello'
+  action :nothing
 end
 
 # $ chef-apply insert_line_to_file.rb
