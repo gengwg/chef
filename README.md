@@ -39,6 +39,14 @@ Loop over each network interface:
   end
 ```
 
+Apply to only a few hosts:
+
+```
+if ['host1', 'host2', 'host3'].include? node['hostname']
+  # do something to the host
+end
+```
+
 ## Errors
 
 ```
