@@ -47,6 +47,15 @@ if ['host1', 'host2', 'host3'].include? node['hostname']
 end
 ```
 
+Ignore Chef failure and continue rest of recipe:
+
+```
+execute 'mycommand' do
+  ...
+  ignore_failure true
+end
+```
+
 ## Errors
 
 ```
