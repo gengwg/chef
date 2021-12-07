@@ -56,6 +56,12 @@ execute 'mycommand' do
 end
 ```
 
+To restrict recipe to Run only on centos hosts, put this at the top of the recipe:
+
+```
+return unless node.centos?
+```
+
 ## Errors
 
 ```
