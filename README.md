@@ -76,6 +76,15 @@ addresses.each_key do |address|
 end
 ```
 
+Add '%' to each item in the list, then join with comma
+
+```
+node.default['sudo']['entry'] += [
+  node.default['sudo']['groups'].map { |group| '%' + group }.join(',') +
+  ' ALL=(ALL) NOPASSWD: ' + cmd,
+]
+```
+
 ## Errors
 
 ```
