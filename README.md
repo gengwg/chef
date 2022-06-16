@@ -62,6 +62,20 @@ To restrict recipe to Run only on centos hosts, put this at the top of the recip
 return unless node.centos?
 ```
 
+
+Get ipv6 address for some interface
+
+```
+
+addresses = node['network']['interfaces']['ethx']['addresses']
+addresses.each_key do |address|
+  if addresses[address]['family'].downcase == 'inet6' &&
+       addresses[address]['scope'].downcase == 'global'
+    node.default['cookbook']['myaddr'] = address
+  end
+end
+```
+
 ## Errors
 
 ```
