@@ -105,6 +105,63 @@ template '/etc/config/myfile.yaml' do
 end
 ```
 
+Append a long string (yaml config) to an existing file.
+NOTE: this only works if `/etc/config/my-config.yaml` is not managed by template.
+Otherwise, Chef will revert all changes to what the template says it is.
+
+```
+# method 1
+long_string = '- schedulerName: foo-scheduler
+  pluginConfig:
+  - args:
+      scoringStrategy:
+        resources:
+        - name: cpu
+          weight: 1
+        - name: memory
+          weight: 1
+        - name: nvidia.com/gpu
+          weight: 3
+        #requestedToCapacityRatioParam:
+        requestedToCapacityRatio:
+          shape:
+          - utilization: 0
+            score: 0
+          - utilization: 100
+            score: 10
+        type: RequestedToCapacityRatio
+    name: NodeResourcesFit'
+
+ruby_block 'insert_lines' do
+  block do
+    file = Chef::Util::FileEdit.new('/etc/config/my-config.yaml')
+    file.insert_line_if_no_match('foo', long_string)
+    file.insert_line_if_no_match('bar', 'hello')
+    file.write_file
+  end
+end
+
+# method 2
+cookbook_file '/tmp/my-config.yaml' do
+  source 'my-config.yaml'
+end
+
+bash 'append_to_config' do
+  user 'root'
+  code <<-EOF
+      cat /tmp/my-config.yaml >> /etc/config/my-config.yaml
+   EOF
+  rm /tmp/my-config.yaml
+  not_if "grep -q foo /etc/kubernetes/config/kube-scheduler.yaml"
+end
+
+# method 3
+execute 'xrig' do
+  command 'cat /tmp/my-config.yaml >> /etc/config/my-config.yaml'
+  only_if chk_cmd
+end
+```
+
 ## Errors
 
 ```
