@@ -85,6 +85,26 @@ node.default['sudo']['entry'] += [
 ]
 ```
 
+Only template if variable is not empty:
+
+```
+# templates/default/myfile.yaml.erb
+<% unless node['my_cookbook']['some_attribute'].to_s.strip.empty? %>
+<%= @some_var %>
+<% end%>
+
+# recipes/server.rb
+template '/etc/config/myfile.yaml' do
+  owner 'root'
+  group 'root'
+  mode '0640'
+  source 'myfile.erb'
+  variables(
+    :some_var => node['my_cookbook']['some_attribute'],
+    )
+end
+```
+
 ## Errors
 
 ```
