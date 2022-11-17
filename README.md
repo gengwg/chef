@@ -9,6 +9,12 @@ chef-client -z whatever.rb
 chef-apply hello.rb
 ```
 
+### Run Chef shell
+
+```
+chef-shell -z
+```
+
 ## Syntax
 
 To print message to standard output inside a `ruby_block`, one can use `puts('aaaaaa')` or `STDOUT.puts('aaaaaaa')`; outside a `ruby_block`, one can use `log('aaaaaa')`:
