@@ -168,6 +168,21 @@ execute 'xrig' do
 end
 ```
 
+Convert a sequence into array:
+
+```
+$ chef-shell
+chef (16.6.14)> ('05'..'08').to_a
+ => ["05", "06", "07", "08"]
+```
+
+Add prefix/suffix to each element of array:
+
+```
+chef (16.6.14)> ('05'..'08').to_a.map { |x| 'my-node-00' + x + '.example.com' }
+ => ["my-node-0005.example.com", "my-node-0006.example.com", "my-node-0007.example.com", "my-node-0008.example.com
+```
+
 ## Errors
 
 ```
