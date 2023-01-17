@@ -192,6 +192,22 @@ chef (16.6.14)> ('05'..'08').to_a.map { |x| 'my-node-00' + x + '.example.com' }
  => ["my-node-0005.example.com", "my-node-0006.example.com", "my-node-0007.example.com", "my-node-0008.example.com
 ```
 
+### Check chef method location and if it exists
+
+If the method exists, it show the location of it:
+
+```
+chef (17.9.52)> node.method(:my_method?)
+ => #<Method: Chef::Node#my_method /var/chef/cache/cookbooks/my_cookbook/libraries/node_functions.rb:18>
+```
+
+If the method does not exist, it show 'undefined method' error:
+
+```
+chef (17.9.52)> node.method(:my_method?)
+(irb):1:in `method': undefined method `my_method?' for class `#<Class:#<Chef::Node:0x00000000037737a8>>' (NameError)
+```
+
 ## Errors
 
 ```
