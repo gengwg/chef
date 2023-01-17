@@ -24,6 +24,26 @@ Chef model is a roll-forward one. As such, rollbacks are not necessarily safe. Y
 - Rever the Chef change
 - Test the diff
 
+### Must configure dependency in metadata when including another cookbook
+
+If you want to include a recipe from another cookbook:
+
+```
+include_recipe 'my_cookbook::my_recipe'
+```
+
+You must have this line in metadata.rb in current cookbook:
+
+```
+depends 'my_cookbook'
+```
+
+If removed from metadata.rb, it causes error:
+
+```
+[2023-01-13T17:00:21-08:00] FATAL: Chef::Exceptions::CookbookNotFound: Cookbook my_cookbook not found. If you're loading my_cookbook from another cookbook, make sure you configure the dependency in your metadata
+```
+
 ## Syntax
 
 To print message to standard output inside a `ruby_block`, one can use `puts('aaaaaa')` or `STDOUT.puts('aaaaaaa')`; outside a `ruby_block`, one can use `log('aaaaaa')`:
