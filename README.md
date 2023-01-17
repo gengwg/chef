@@ -15,6 +15,15 @@ chef-apply hello.rb
 chef-shell -z
 ```
 
+### Chef rollbacks are not safe
+
+Chef model is a roll-forward one. As such, rollbacks are not necessarily safe. You need treat rollbacks to be standard diff that are tested.
+
+- Understand the intent of the original diff (so you can be sure you're properly undoing it).
+- Find the commit ID.
+- Rever the Chef change
+- Test the diff
+
 ## Syntax
 
 To print message to standard output inside a `ruby_block`, one can use `puts('aaaaaa')` or `STDOUT.puts('aaaaaaa')`; outside a `ruby_block`, one can use `log('aaaaaa')`:
