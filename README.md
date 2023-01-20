@@ -228,7 +228,30 @@ chef (17.9.52)> node.method(:my_method?)
 (irb):1:in `method': undefined method `my_method?' for class `#<Class:#<Chef::Node:0x00000000037737a8>>' (NameError)
 ```
 
+### To delete an item from array 
+
+E.g. exclude certain package from controller nodes:
+
+```
+if node['fqdn'].include?('ctrlplane')
+  node.default['mycookbook']['packages'].delete('git-lfs')
+end
+```
+
+One can verify the element is removed using chef-shell, make sure the item is not in the list any more.
+
+```
+chef (xx.x.xx)> node.default['mycookbook']['packages']
+ =>
+["ack",
+ "bind-utils",
+...
+ "zsh"]
+```
+
 ## Errors
+
+### Node attributes are read-only 
 
 ```
 Chef::Exceptions::ImmutableAttributeModification: Node attributes are read-only when you do not specify which precedence level to set. To set an attribute use code like   `node.default["key"] = "value"'
@@ -236,10 +259,20 @@ Chef::Exceptions::ImmutableAttributeModification: Node attributes are read-only 
 
 ===>
 
+Node attributes are read-only when you do not specify which precedence level to set. To set an attribute use code like   `node.default["key"] = "value"`:
+
 ```
 node['cookbook_name']['attribute_name'] = 'abc'
 # change to:
 node.default['cookbook_name']['attribute_name'] = 'abc'
+```
+
+Similarly for previous example:
+
+`node['mycookbook']['packages'].delete('git-lfs')` would fail same error. One should use:
+
+```
+node.default['mycookbook']['packages'].delete('git-lfs')
 ```
 
 ## Misc
