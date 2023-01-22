@@ -15,6 +15,30 @@ chef-apply hello.rb
 chef-shell -z
 ```
 
+### Create an empty file using chef shell
+
+```
+# switch to recipes mode:
+chef:attributes (17.9.52)> recipe_mode
+ => :attributes
+chef:recipe (17.9.52)>
+
+# chef-shell creates the rousrce and put it in the run-list, but not yet created the file
+chef:recipe (17.9.52)> file '/tmp/aa'
+ => <file[/tmp/aa] @name: "/tmp/aa" @before: nil @params: {} @provider: nil @allowed_actions: [:nothing, :create, :delete, :touch, :create_if_missing] @action: [:create] @updated: false @updated_by_last_action: false @source_line: "(irb#1):3:in `<main>'" @guard_interpreter: nil @default_guard_interpreter: :default @elapsed_time: 0 @declared_type: :file @cookbook_name: nil @recipe_name: nil>
+ 
+# initiate a chef infra client run
+chef:recipe (17.9.52)> run_chef
+.....
+[2023-01-22T10:58:03-08:00] INFO: Processing file[/tmp/aa] action create ((irb#1) line 3)
+[2023-01-22T10:58:03-08:00] INFO: file[/tmp/aa] created file /tmp/aa
+chef:recipe (17.9.52)> ls('/tmp').grep('aa')
+ => ["aa"]
+$ ls /tmp/aa
+/tmp/aa
+```
+
+
 ### Chef rollbacks are not safe
 
 Chef model is a roll-forward one. As such, rollbacks are not necessarily safe. You need treat rollbacks to be standard diff that are tested.
