@@ -309,6 +309,36 @@ end
 
 We restrict it to centos 8 because issue currently only observed in centos 8. c7 seems fine.
 
+Resulted full systemd unit:
+
+```
+$ systemctl cat slurmd
+# /usr/lib/systemd/system/slurmd.service
+[Unit]
+Description=Slurm node daemon
+After=munge.service network.target remote-fs.target
+#ConditionPathExists=/etc/slurm/slurm.conf
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/slurmd
+ExecStart=/usr/sbin/slurmd -D $SLURMD_OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+LimitNOFILE=131072
+LimitMEMLOCK=infinity
+LimitSTACK=infinity
+Delegate=yes
+TasksMax=infinity
+
+[Install]
+WantedBy=multi-user.target
+
+# /etc/systemd/system/slurmd.service.d/10-restart_on_failure.conf # <-----
+[Service]
+Restart=on-failure
+RestartSec=5
+```
 
 ## Errors
 
