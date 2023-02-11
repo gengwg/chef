@@ -273,6 +273,43 @@ chef (xx.x.xx)> node.default['mycookbook']['packages']
  "zsh"]
 ```
 
+### Add a drop-in config for systemd unit
+
+For systemd unit, it is recommended using a drop-in file instead of modifying the xyz.service file directly. Here is how to do it in Chef using a systemd drop-in config:
+
+First create a drop-in file (ex. `templates/default/10-restart_on_failure.conf.erb`):
+
+```
+[Service]
+Restart=on-failure
+RestartSec=5
+```
+
+Then in your slurm cookbook, place that drop-in config into the systemd directory, like this:
+
+```
+if node.centos8?
+  slurmd_systemd_dir = "/etc/systemd/system/#{slurmd_srv_name}.service.d/"
+  directory slurmd_systemd_dir do
+    owner  'root'
+    group  'root'
+    mode   '0755'
+  end
+  template "#{slurmd_systemd_dir}/10-restart_on_failure.conf" do
+    source '10-restart_on_failure.conf.erb'
+    owner  'root'
+    group  'root'
+    mode   '0644'
+    action :create
+    notifies :run, 'execute[daemon-reload]', :immediately
+    notifies :restart, "service[#{slurmd_srv_name}]", :immediately
+  end
+end
+```
+
+We restrict it to centos 8 because issue currently only observed in centos 8. c7 seems fine.
+
+
 ## Errors
 
 ### Node attributes are read-only 
