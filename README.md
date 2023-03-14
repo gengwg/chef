@@ -340,6 +340,18 @@ Restart=on-failure
 RestartSec=5
 ```
 
+
+### Check fqdn
+
+```
+chef (17.9.52)> node['hostname']
+ => "node0007"
+chef (17.9.52)> node['fqdn']
+ => "node0007.example.com"
+chef (17.9.52)> node['domain']
+ => "example.com"
+```
+
 ## Errors
 
 ### Node attributes are read-only 
