@@ -10,6 +10,10 @@ require 'json'
 # Set the path to the cpu_manager_state file.
 cpu_state_file='/var/lib/kubelet/cpu_manager_state'
 
+	
+# Guard against if cpu_manager_state not exist
+return if !File.exist?(cpu_state_file)
+
 # Read the contents of the cpu_manager_state file into a string.
 file_contents = File.read(cpu_state_file)
 
