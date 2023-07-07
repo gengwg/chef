@@ -15,6 +15,12 @@ chef-apply hello.rb
 chef-shell -z
 ```
 
+### Get all keys for a resource
+
+```
+chef (17.9.52)> node.keys
+```
+
 ### Create an empty file using chef shell
 
 ```
