@@ -44,6 +44,25 @@ $ ls /tmp/aa
 /tmp/aa
 ```
 
+### Get the users of an AD group and convert the output into an array
+
+```
+require 'mixlib/shellout'
+
+# Execute the shell command
+command = 'getent group SomeADGroup | awk -F: \'{ print $4 }\''
+shell_out = Mixlib::ShellOut.new(command)
+shell_out.run_command
+
+# Get the command output as a string
+output = shell_out.stdout.strip
+
+# Convert the comma-separated string into an array
+array = output.split(',')
+
+# Display the array
+puts array.inspect
+```
 
 ### Chef rollbacks are not safe
 
