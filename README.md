@@ -64,6 +64,44 @@ array = output.split(',')
 puts array.inspect
 ```
 
+### Convert hardcoded variable into an attribute to allow users to customize it
+
+Originally hardcoded variable:
+
+``
+owners = node['myserver']['owners']
+``
+
+In parent cookbook:
+
+Add file `attributes/default.rb`:
+
+```
+default['fb_subids'] = {
+  'owners' => [],
+}
+```
+
+Then modify the variable to use that attribute:
+
+```
+  if node.dev?
+    owners = node['myserver']['owners'].to_set
+  else
+    owners = node['parent_cookbook']['owners'].to_set
+  end
+```
+
+
+In the calling cookbook:
+
+you can overwrite the attribute with node.default:
+
+```
+owners = [my list of owners]
+node.default['parent_cookbook']['owners'] = owners
+```
+
 ### Chef rollbacks are not safe
 
 Chef model is a roll-forward one. As such, rollbacks are not necessarily safe. You need treat rollbacks to be standard diff that are tested.
