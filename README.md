@@ -415,6 +415,24 @@ chef (17.9.52)> node['domain']
  => "example.com"
 ```
 
+### Check CPU Manufacturer 
+
+```
+if node.centos?
+  cpu_vendor_id = node['cpu']['0']['vendor_id']
+elsif node.macos?
+  cpu_vendor_id = node['cpu']['vendor_id']
+else
+  cpu_vendor_id = 'unknown'
+end
+
+if ['GenuineIntel', 'Intel'].include?(cpu_vendor_id)
+  cpu_manufacturer = 'intel'
+else
+  cpu_manufacturer = 'other'
+end
+```
+
 ## Errors
 
 ### Node attributes are read-only 
@@ -451,5 +469,4 @@ attributes are defined by
     * environments
 
 run lists specify what recipes the node should run, along with the order in which they should run.
-
 
