@@ -215,6 +215,12 @@ addresses.each_key do |address|
 end
 ```
 
+Retrieve the primary interface using Ohai: 
+
+```
+node['network']['default_inet6_interface']
+```
+
 Add '%' to each item in the list, then join with comma
 
 ```
