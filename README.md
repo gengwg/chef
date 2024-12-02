@@ -147,6 +147,23 @@ log(format('IPADDR=169.254.1.2%02d', 7))
 #Output: * log[IPADDR=169.254.1.207] action write
 ```
 
+Test a node function using log output:
+
+```
+if node['environment'] == 'production'
+  log 'Node is in the production environment' do
+    level :info
+  end
+else
+  log 'Node is NOT in the production environment' do
+    level :info
+  end
+end
+
+# Example output
+# * log[Node is NOT in the production environment] action write
+```
+
 Loop over each network interface:
 
 ```
