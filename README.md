@@ -456,6 +456,15 @@ else
 end
 ```
 
+### Guard evaluate condition at the runtime
+
+    'only_if' => proc { ::File.exist?(CERT_PATH) },
+
+Using a proc for guards like only_if is common in Chef because:
+
+	•	The only_if condition needs to be re-evaluated at the time of execution, not just during the compile phase of the Chef run.
+	•	It ensures the resource behavior reflects the current state of the system, even if the system’s state changes between the compile and execute phases.
+
 ## Errors
 
 ### Node attributes are read-only 
